@@ -2,33 +2,37 @@ package com.example.remo
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class MemoViewModel : ViewModel() {
-    private val memos = mutableStateListOf<Memo>()
+    private val _memos = MutableStateFlow<List<Memo>>(emptyList())
+    val memos: StateFlow<List<Memo>> = _memos //jetpack의 호환성때문에 라이브데이터 안쓰고 null을 가질수 없어서 널체크 할 필요 없음 ,최신상태유지,상태관리 UI
 
     init {
         // 초기 데이터 로딩
-        memos.addAll(listOf(
-            Memo(1, "Sample Memo 1", "This is the content of Memo 1."),
-            Memo(2, "Sample Memo 2", "This is the content of Memo 2.")
-        ))
-    }
 
-    fun getMemos() = memos
+    }
 
     fun addMemo(title: String, content: String) {
-        val newId = (memos.maxOfOrNull { it.id } ?: 0) + 1
-        memos.add(Memo(newId, title, content))
-    }
 
-    fun updateMemo(id: Int, title: String, content: String) {
-        memos.find { it.id == id }?.let {
-            it.title = title
-            it.content = content
+        viewModelScope.launch {
+            val newMemo = Memo(
+                id = _memos.value.size + 1 ,
+                title = title,
+                content = content
+            )
+            _memos.value = _memos.value + newMemo
         }
     }
 
+    fun updateMemo(id: Int, title: String, content: String) {
+
+    }
+
     fun deleteMemo(id: Int) {
-        memos.removeAll { it.id == id }
+
     }
 }
