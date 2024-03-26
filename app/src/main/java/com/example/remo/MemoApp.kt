@@ -93,14 +93,18 @@ fun MemoDetail(memoViewModel:MemoViewModel = viewModel(),
                 memoId : Int,
                 navController: NavController){
     val memo = memoViewModel.memos.collectAsState().value.find { it.id == memoId }
-    Log.d("MemoDetail", "Memo ID: $memoId, Memo: ${memo?.title}, ${memo?.content}")
-
+    if(memo==null){
+        Log.d("MemoDetail","$memoId")
+    }else {
+        Log.d("MemoDetail", "Memo ID: $memoId, Memo: ${memo?.title}, ${memo?.content}")
+    }
     var title by rememberSaveable {
         mutableStateOf(memo?.title?:"")
     }
     var content by rememberSaveable {
         mutableStateOf(memo?.content?:"")
     }
+
 
     Column(modifier=Modifier.padding(16.dp)){
         TextField(value = title , onValueChange = { title = it},
