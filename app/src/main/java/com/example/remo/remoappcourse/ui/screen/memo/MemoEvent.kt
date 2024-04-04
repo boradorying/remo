@@ -5,5 +5,6 @@ sealed interface MemoEvent {
     data class ContentChagne(val value:String):MemoEvent
     object  Save : MemoEvent
     object  NavigateBack : MemoEvent
+    object DeleteMemo : MemoEvent
 
 }

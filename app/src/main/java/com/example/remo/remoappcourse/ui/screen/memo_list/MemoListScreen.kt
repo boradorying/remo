@@ -9,6 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -19,9 +23,19 @@ import com.example.remo.remoappcourse.domain.model.Memo
 @Composable
 fun MemoListScereen(
     memoList : List<Memo>,
-    onMemoClick:(Memo)->Unit
+    onMemoClick:(Memo)->Unit,
+    onAddMemoClick:()->Unit
 ) {
-    Scaffold { padding ->
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddMemoClick)
+            {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription ="add memo" )
+            }
+        }
+    ) { padding ->
         LazyColumn (
             contentPadding = PaddingValues(
                 start =20.dp,
